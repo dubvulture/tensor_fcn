@@ -20,12 +20,10 @@ class FCN(object):
     def __init__(self,
                  classes,
                  logs_dir,
-                 lr=1e-05,
                  checkpoint=None):
         """
         :param classes: number of classes for classification
         :param logs_dir: directory for logs
-        :param lr: initial learning rate
         :param checkpoint: a CheckpointState from get_checkpoint_state
         """
         self.logs_dir = logs_dir
@@ -37,23 +35,24 @@ class FCN(object):
         self.weight = tf.placeholder(
             tf.float32, shape=[None, None, None, 1], name='weight')
 
+        self.lr = tf.placeholder(tf.float32, shape=[], name='learning_rate')
+
         self.prediction, self.logits = create_fcn(self.image, self.keep_prob, classes)
 
         self.score = tf.nn.softmax(self.logits)
 
         global_step = tf.Variable(0, name='global_step', trainable=False)
         self.loss_op = self._loss()
-        self.train_op = self._training(lr, global_step)
+        self.train_op = self._training(global_step)
 
         self.checkpoint = checkpoint
 
-    def _training(self, lr, global_step):
+    def _training(self, global_step):
         """
         Setup the training phase with Adam
-        :param lr: initial learning rate
         :param global_step: global step of training
         """
-        optimizer = tf.train.AdamOptimizer(lr)
+        optimizer = tf.train.AdamOptimizer(self.lr)
         grads = optimizer.compute_gradients(self.loss_op)
         return optimizer.apply_gradients(grads, global_step=global_step)
 
@@ -89,6 +88,7 @@ class FCN(object):
     def train(self,
               train_set,
               val_set=None,
+              lr=1e-5,
               keep_prob=0.5,
               train_freq=10,
               val_freq=0,
@@ -97,6 +97,7 @@ class FCN(object):
         """
         :param train_set: instance of a DatasetReader subclass
         :param val_set: instance of a DatasetReader subclass
+        :param lr: initial learning rate
         :param keep_prob: 1 - dropout
         :param train_freq: trace train_loss every train_freq iterations
         :param val_freq: trace val_loss every val_freq iterations
@@ -109,7 +110,6 @@ class FCN(object):
 
         summ_train = tf.summary.merge_all(key='train')
         summ_val = tf.Summary()
-
         summ_val.value.add(tag='val_loss', simple_value=0)
 
         sv = self._setup_supervisor()
@@ -125,6 +125,7 @@ class FCN(object):
                     self.image: images,
                     self.annotation: anns,
                     self.weight: weights,
+                    self.lr: lr,
                     self.keep_prob: keep_prob
                 }
                 sess.run(self.train_op, feed_dict=feed)
