@@ -7,7 +7,6 @@ import os
 import sys
 
 import cv2
-import dill
 import numpy as np
 import tensorflow as tf
 
@@ -171,13 +170,7 @@ class TensorFCN(object):
                     # Save model
                     sv.saver.save(sess, self.logs_dir + 'model.ckpt', step)
                     print('Step %d\tModel saved.' % step)
-                    # Save train & set dataset state
-                    dill.dump(
-                        train_set,
-                        open(os.path.join(self.logs_dir, 'train_set.pkl'), 'wb'))
-                    dill.dump(
-                        val_set,
-                        open(os.path.join(self.logs_dir, 'val_set.pkl'), 'wb'))
+                    # TODO Save train & set dataset state
 
                 if step == max_steps:
                     break
