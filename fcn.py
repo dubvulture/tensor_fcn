@@ -11,11 +11,11 @@ import dill
 import numpy as np
 import tensorflow as tf
 
-from fcn_tf import tf_utils
-from fcn_tf.networks import create_fcn
+from tensor_fcn import tf_utils
+from tensor_fcn.networks import create_fcn
 
 
-class FCN(object):
+class TensorFCN(object):
 
     def __init__(self,
                  classes,

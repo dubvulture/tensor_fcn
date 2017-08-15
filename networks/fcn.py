@@ -3,9 +3,9 @@ from six.moves import range
 
 import tensorflow as tf
 
-from fcn_tf import tf_utils
-from fcn_tf.networks import create_vgg16
-from fcn_tf.networks import create_vgg19
+from tensor_fcn import tf_utils
+from tensor_fcn.networks import create_vgg16
+from tensor_fcn.networks import create_vgg19
 
 
 def create_fcn(placeholder, keep_prob, classes, base='VGG19'):

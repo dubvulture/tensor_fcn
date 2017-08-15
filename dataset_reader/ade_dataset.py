@@ -6,7 +6,7 @@ import os
 import cv2
 import numpy as np
 
-from fcn_tf.dataset_reader.dataset_reader import BatchDataset
+from tensor_fcn.dataset_reader.dataset_reader import BatchDataset
 
 
 class ADE_Dataset(BatchDataset):

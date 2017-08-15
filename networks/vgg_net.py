@@ -1,12 +1,14 @@
 from __future__ import absolute_import
+from six.moves import urllib
 
 import os
+import sys
 
 import numpy as np
 import scipy.io as sio
 import tensorflow as tf
 
-from fcn_tf import tf_utils
+from tensor_fcn import tf_utils
 
 
 MODEL_16 = 'http://www.vlfeat.org/matconvnet/models/beta16/' \
@@ -83,7 +85,7 @@ def _setup_net(placeholder, layers, weights, mean_pixel):
     return net
 
 
-def create_vgg16(placeholder, model_dir='fcn_tf/networks/Model_zoo/'):
+def create_vgg16(placeholder, model_dir='tensor_fcn/networks/Model_zoo/'):
     """
     :param placeholder: tf.placeholder where we will operate
     :param model_dir: directory where to find the model .mat file
@@ -93,7 +95,7 @@ def create_vgg16(placeholder, model_dir='fcn_tf/networks/Model_zoo/'):
     return _setup_net(placeholder, LAYERS_16, *_get_model_attr(model_dir, MODEL_16))
 
 
-def create_vgg19(placeholder, model_dir='fcn_tf/networks/Model_zoo/'):
+def create_vgg19(placeholder, model_dir='tensor_fcn/networks/Model_zoo/'):
     """
     :param placeholder: tf.placeholder where we will operate
     :param model_dir: directory where to find the model .mat file
