@@ -19,7 +19,8 @@ class TensorFCN(object):
     def __init__(self,
                  classes,
                  logs_dir,
-                 checkpoint=None):
+                 checkpoint=None,
+                 base='VGG19'):
         """
         :param classes: number of classes for classification
         :param logs_dir: directory for logs
@@ -36,7 +37,8 @@ class TensorFCN(object):
 
         self.lr = tf.placeholder(tf.float32, shape=[], name='learning_rate')
 
-        self.prediction, self.logits = create_fcn(self.image, self.keep_prob, classes)
+        self.prediction, self.logits = create_fcn(
+            self.image, self.keep_prob, classes, base=base)
 
         self.score = tf.nn.softmax(self.logits)
 
