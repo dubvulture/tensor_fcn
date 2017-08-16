@@ -4,9 +4,10 @@ Tensorflow implementation of [Fully Convolutional Networks for Semantic Segmenta
 
 The model can be applied on the [Scene Parsing Challenge dataset](http://sceneparsing.csail.mit.edu/) provided by MIT straightaway after cloning this repo. I do not have any trained model available due to lack of computing resources.
 
+## Table of contents
 1. [Prerequisites](#prerequisites)
 2. [Differences](#differences)
-3. [How to use](#how-to-use)
+3. [Usage](#usage)
 4. [Datasets](#datasets)
 
 
@@ -17,7 +18,7 @@ The model can be applied on the [Scene Parsing Challenge dataset](http://scenepa
 - Tested only with `tensorflow 1.1.0` and `python 2.7.12` on `Ubuntu 16.04`. I tried to make this `python 3` compatible but I haven't checked yet if it works.
 
 
-# Differences
+## Differences
 As pointed out frequently in the issue tracker of [FCN.tensorflow](https://github.com/shekkizh/FCN.tensorflow/issues) there were some discrepancies between the caffe and the tensorflow implementation.
 Here are the main ones and how I handled them:
 
@@ -32,11 +33,11 @@ I just sticked to the original implementation using max pooling.
 ### [Final layer of VGG](https://github.com/shekkizh/FCN.tensorflow/issues/46)
 I just sticked to the original implementation using the relu'd layer.
 
-## VGG19 or VGG16
+### VGG19 or VGG16
 The original implementation used **VGG16**, [shekkizh](https://github.com/shekkizh) used **VGG19**. I leave you with the freedom of choice.
 
 
-## How to use
+## Usage
 [example.py](https://github.com/dubvulture/tensor_fcn/blob/master/examples.py) should be self-explanatory for basic usage. Note that a trained model can be run also on arbitrary sized images that will be accordingly padded to avoid information loss during pooling. 
 
 Things you can set while setting up the network and training phase:
