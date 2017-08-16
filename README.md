@@ -5,9 +5,9 @@ Tensorflow implementation of [Fully Convolutional Networks for Semantic Segmenta
 The model can be applied on the [Scene Parsing Challenge dataset](http://sceneparsing.csail.mit.edu/) provided by MIT straightaway after cloning this repo. I do not have any trained model available due to lack of computing resources.
 
 1. [Prerequisites](#prerequisites)
-2. [How to use](#how-to-use)
-3. [Datasets](#datasets)
-4. [Differences](#differences)
+2. [Differences](#differences)
+3. [How to use](#how-to-use)
+4. [Datasets](#datasets)
 
 
 ## Prerequisites
