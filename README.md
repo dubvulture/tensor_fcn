@@ -57,6 +57,9 @@ Things you can tweak in the code:
 - [Loss function](./fcn.py#L58)
 - [Number of models](./fcn.py#L72) to keep saved during training.
 
+#### Scene Parsing Dataset / ADEChallenge2016
+`get_ade_dataset.sh` is a simple script to download, verify and extract the whole dataset. It also changes the file/directory structure in order to be more coherent and compatible with the `ADE_Dataset` class.
+
 ## Datasets
 
 In [dataset_reader](./dataset_reader/) there are two classes, [BatchDataset](./dataset_reader/dataset_reader.py) which is supposed to be an abstract class, and [ADE_Dataset](./dataset_reader/ade_dataset.py) which is an example on how to specialize **BatchDataset** and is ready to be used for training.

@@ -54,7 +54,7 @@ class TensorFCN(object):
         optimizer = tf.train.AdamOptimizer(self.lr)
         grads = optimizer.compute_gradients(self.loss_op)
         for grad, var in grads:
-            tf_utils.add_gradient_summary(grad, var, collections=['train']
+            tf_utils.add_gradient_summary(grad, var, collections=['train'])
         return optimizer.apply_gradients(grads, global_step=global_step)
 
     def _loss(self):

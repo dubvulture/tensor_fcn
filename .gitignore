@@ -1,4 +1,9 @@
 Model_zoo/
+ADEChallengeData2016/
+ADEChallengeData2016.zip
+
+
+*.swp
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
