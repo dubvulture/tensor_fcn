@@ -39,7 +39,7 @@ The original implementation used **VGG16**, [shekkizh](https://github.com/shekki
 
 
 ## Usage
-[example.py](https://github.com/dubvulture/tensor_fcn/blob/master/examples.py) should be self-explanatory for basic usage. Note that a trained model can be run also on arbitrary sized images that will be accordingly padded to avoid information loss during pooling. 
+[example.py](./examples.py) should be self-explanatory for basic usage. Note that a trained model can be run also on arbitrary sized images that will be accordingly padded to avoid information loss during pooling. 
 
 Things you can set while setting up the network and training phase:
 - *Number of classes*
@@ -53,16 +53,16 @@ Things you can set while setting up the network and training phase:
 - [Choosing](./fcn.py#L23) between VGG19 or VGG16 (and maybe others if implemented) as **encoders**.
 
 Things you can tweak in the code:
-- [Optimizer](./fcn.py#L49) - default is **Adam**.
-- [Loss function](./fcn.py#L58)
-- [Number of models](./fcn.py#L72) to keep saved during training.
+- [Optimizer](./tensor_fcn/fcn.py#L49) - default is **Adam**.
+- [Loss function](./tensor_fcn/fcn.py#L58)
+- [Number of models](./tensor_fcn/fcn.py#L72) to keep saved during training.
 
 #### Scene Parsing Dataset / ADEChallenge2016
 [get_ade_dataset.sh](./get_ade_dataset.sh) is a simple script to download, verify and extract the whole dataset. It also changes the file/directory structure in order to be more coherent and compatible with the `ADE_Dataset` class.
 
 ## Datasets
 
-In [dataset_reader](./dataset_reader/) there are two classes, [BatchDataset](./dataset_reader/dataset_reader.py) which is supposed to be an abstract class, and [ADE_Dataset](./dataset_reader/ade_dataset.py) which is an example on how to specialize **BatchDataset** and is ready to be used for training.
+In [dataset_reader](./tensor_fcn/dataset_reader/) there are two classes, [BatchDataset](./tensor_fcn/dataset_reader/dataset_reader.py) which is supposed to be an abstract class, and [ADE_Dataset](./tensor_fcn/dataset_reader/ade_dataset.py) which is an example on how to specialize **BatchDataset** and is ready to be used for training.
 Basic usage of a subclass:
 ```python
 dt = MyDataset(*args, **kwargs)
