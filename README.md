@@ -23,15 +23,15 @@ The model can be applied on the [Scene Parsing Challenge dataset](http://scenepa
 As pointed out frequently in the issue tracker of [FCN.tensorflow](https://github.com/shekkizh/FCN.tensorflow/issues) there were some discrepancies between the caffe and the tensorflow implementation.
 Here are the main ones and how I handled them:
 
-- ### [Conv6 padding](https://github.com/shekkizh/FCN.tensorflow/issues/52)
+- ### Conv6 padding [<sup>1</sup>](https://github.com/shekkizh/FCN.tensorflow/issues/52)
 In the original implementation there was no padding in order to shrink the tensor down to ` [batch_size, 1, 1, 4096]`.
 This works well when the input images are 224x224 but for any other resolution it will break the deconvolution phase.
 Since the padding did no harm and the results were still acceptable I decided to leave it as it is.
 
-- ### [Average Pooling or Max Pooling](https://github.com/shekkizh/FCN.tensorflow/issues/26)
+- ### Average Pooling or Max Pooling [<sup>2</sup>](https://github.com/shekkizh/FCN.tensorflow/issues/26)
 I just sticked to the original implementation using max pooling.
 
-- ### [Final layer of VGG](https://github.com/shekkizh/FCN.tensorflow/issues/46)
+- ### Final layer of VGG [<sup>3</sup>](https://github.com/shekkizh/FCN.tensorflow/issues/46)
 I just sticked to the original implementation using the relu'd layer.
 
 - ### VGG19 or VGG16
