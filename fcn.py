@@ -53,6 +53,8 @@ class TensorFCN(object):
         """
         optimizer = tf.train.AdamOptimizer(self.lr)
         grads = optimizer.compute_gradients(self.loss_op)
+        for grad, var in grads:
+            tf_utils.add_gradient_summary(grad, var, collections=['train']
         return optimizer.apply_gradients(grads, global_step=global_step)
 
     def _loss(self):
@@ -103,9 +105,9 @@ class TensorFCN(object):
         :param save_freq: save model every save_freq iterations
         :param max_steps: max steps to perform
         """
-        tf.summary.scalar('train_loss', self.loss_op, collections=['train'])
         for var in tf.trainable_variables():
             tf.summary.histogram(var.op.name, var, collections=['train'])
+        tf.summary.scalar('train_loss', self.loss_op, collections=['train'])
 
         summ_train = tf.summary.merge_all(key='train')
         summ_val = tf.Summary()

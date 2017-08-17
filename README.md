@@ -10,6 +10,7 @@ The model can be applied on the [Scene Parsing Challenge dataset](http://scenepa
 3. [Usage](#usage)
 4. [Datasets](#datasets)
 
+---
 
 ## Prerequisites
 - [numpy](https://github.com/numpy/numpy)
