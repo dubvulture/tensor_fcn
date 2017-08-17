@@ -10,7 +10,6 @@ from tensor_fcn.dataset_reader import ADE_Dataset
 
 """
 Just some simple examples showing how to use any of this.
-Remember to run this outside the tensor_fcn folder
 """
 
 
@@ -22,7 +21,7 @@ network = TensorFCN(151, logs_dir, checkpoint=ckpt)
 
 def ade_train():
     # Batch Size = 4, Image/Crop Size = 256,  
-    train_set = ADE_Dataset(os.path.join(ade_dir, 'train/'), 2, 256, crop=True)
+    train_set = ADE_Dataset(os.path.join(ade_dir, 'train/'), 4, 256, crop=True)
     # Retrieve just a small subset 
     fnames = [i[:-4] for i in os.listdir(os.path.join(ade_dir, 'val/images/'))][:50]
     # Batch Size = 1, Image Size = 0 (variable, do not crop) 
