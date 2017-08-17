@@ -58,7 +58,7 @@ Things you can tweak in the code:
 - [Number of models](./fcn.py#L72) to keep saved during training.
 
 #### Scene Parsing Dataset / ADEChallenge2016
-`get_ade_dataset.sh` is a simple script to download, verify and extract the whole dataset. It also changes the file/directory structure in order to be more coherent and compatible with the `ADE_Dataset` class.
+[get_ade_dataset.sh](./get_ade_dataset.sh) is a simple script to download, verify and extract the whole dataset. It also changes the file/directory structure in order to be more coherent and compatible with the `ADE_Dataset` class.
 
 ## Datasets
 

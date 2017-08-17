@@ -8,6 +8,13 @@ then
 	wget 'http://data.csail.mit.edu/places/ADEchallenge/ADEChallengeData2016.zip'
 fi
 
+if md5sum --status -c adechallenge.md5; then
+	echo 'MD5 matches'
+else
+	echo 'MD5 does not match'
+	exit 1
+fi
+
 rm -rf ${name}/
 
 echo 'Unzipping...'
