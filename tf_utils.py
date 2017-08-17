@@ -11,11 +11,13 @@ import tensorflow as tf
 
 def save_image(image, save_dir, name):
     """ 
-    :param image:
+    :param image: numpy array
     :param save_dir:
     :param name:
     """
-    cv2.imwrite(os.path.join(save_dir, name + ".png"), image)
+    if issubclass(image.dtype.type, np.floating):
+        image = np.uint8(image * 255)
+    cv2.imwrite(os.path.join(save_dir, name + '.png'), image)
 
 
 def get_pad(image, mul=32):

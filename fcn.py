@@ -40,8 +40,6 @@ class TensorFCN(object):
         self.prediction, self.logits = create_fcn(
             self.image, self.keep_prob, classes, base=base)
 
-        self.score = tf.nn.softmax(self.logits)
-
         global_step = tf.Variable(0, name='global_step', trainable=False)
         self.loss_op = self._loss()
         self.train_op = self._training(global_step)
@@ -120,8 +118,8 @@ class TensorFCN(object):
             while not sv.should_stop():
                 images, anns, weights, _ = train_set.next_batch()
                 # Transform to match NN inputs
-                images = images.astype(np.float32) / 255.
-                anns = anns.astype(np.int32)
+                images = np.float32(images) / 255.
+                anns = np.int32(anns)
                 feed = {
                     self.image: images,
                     self.annotation: anns,
@@ -150,8 +148,8 @@ class TensorFCN(object):
                         sys.stdout.flush()
                         images, anns, weights, _ = val_set.next_batch()
                         # Transform to match NN inputs
-                        images = images.astype(np.float32) / 255.
-                        anns = anns.astype(np.int32)
+                        images = np.float32(images) / 255.
+                        anns = np.int32(anns)
                         feed = {
                             self.image: images,
                             self.annotation: anns,
@@ -177,38 +175,35 @@ class TensorFCN(object):
                 if step == max_steps:
                     break
 
-    def test(self, filenames, directory):
+    def test(self, files):
         """
-        Run on images in directory without their groundtruth
-        :param filenames:
-        :param directory:
+        Run on images of any size without their groundtruth
+        :param files: list of absolute paths to images
         """
+        out_dir = os.path.join(self.logs_dir, 'output/')
+        if not os.path.exists(out_dir):
+            os.makedirs(out_dir)
+
         sv = self._setup_supervisor()
         
         with sv.managed_session() as sess:
-            for i, fname in enumerate(filenames):
-                in_image = cv2.imread(os.path.join(directory, fname))
+            for i, fname in enumerate(files):
+                in_image = cv2.imread(fname)
                 # pad image to the nearest multiple of 32
                 dy, dx = tf_utils.get_pad(in_image, mul=32)
                 in_image = tf_utils.pad(in_image, dy, dx)
                 # batch size = 1
                 in_image = np.expand_dims(in_image, axis=0)
-                in_image = in_image.astype(np.float32) / 255.
+                in_image = np.float32(in_image) / 255.
 
                 feed = {self.image: in_image, self.keep_prob: 1.0}
-                pred, score = sess.run([self.prediction, self.score], feed_dict=feed)
+                pred = sess.run(self.prediction, feed_dict=feed)
                 print('Evaluated image\t' + fname)
 
                 # squeeze dims and undo padding
                 dy = pred.shape[1] - dy
                 dx = pred.shape[2] - dx
-                output = np.squeeze(pred, axis=(0,3))[:dy, :dx]
-                out_dir = os.path.join(self.logs_dir, 'output/')
-                if not os.path.exists(out_dir):
-                    os.makedirs(out_dir)
-
-                tf_utils.save_image(
-                    np.uint8(output * 255),
-                    out_dir,
-                    name=fname)
+                output = np.squeeze(pred, axis=(0,3))[:dy,:dx]
+                name = os.path.splitext(os.path.basename(fname))[0]
+                tf_utils.save_image(output, out_dir, name=name)
 

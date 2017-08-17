@@ -2,6 +2,8 @@ from __future__ import absolute_import
 
 import os
 
+import tensorflow
+
 from tensor_fcn.fcn import TensorFCN
 from tensor_fcn.dataset_reader import ADE_Dataset
 
@@ -15,10 +17,10 @@ Remember to run this outside the tensor_fcn folder
 ade_dir = '/path/to/ADEChallengeData2016/'
 logs_dir = os.path.abspath('/path/to/logs/')
 ckpt = tf.train.get_checkpoint_state(logs_dir)
+network = TensorFCN(151, logs_dir, checkpoint=ckpt)
 
 
 def ade_train():
-    network = TensorFCN(151, logs_dir, checkpoint=ckpt)
     # Batch Size = 4, Image/Crop Size = 256,  
     train_set = ADE_Dataset(os.path.join(ade_dir, 'train/'), 2, 256, crop=True)
     # Retrieve just a small subset 
@@ -31,6 +33,9 @@ def ade_train():
 
 def test():
     test_dir = '/path/to/some/images/'
-    files = os.listdir(test_dir)
-    network.test(files, test_dir)
+    files = [
+        os.path.abspath(os.path.join(test_dir, f))
+        for f in os.listdir(test_dir)
+    ]
+    network.test(files)
 
