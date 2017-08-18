@@ -170,7 +170,7 @@ class TensorFCN(object):
                 if (step == max_steps) or ((save_freq > 0) and
                                            (step % save_freq) == 0):
                     # Save model
-                    sv.saver.save(sess, self.logs_dir + 'model.ckpt', step)
+                    sv.saver.save(sess, os.path.join(self.logs_dir, 'model.ckpt'), step)
                     print('Step %d\tModel saved.' % step)
                     # TODO Save train & set dataset state
 

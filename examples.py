@@ -2,7 +2,7 @@ from __future__ import absolute_import
 
 import os
 
-import tensorflow
+import tensorflow as tf
 
 from tensor_fcn.fcn import TensorFCN
 from tensor_fcn.dataset_reader import ADE_Dataset
