@@ -57,8 +57,10 @@ class ADE_Dataset(BatchDataset):
         return [image, annotation, weight]
 
     def _crop_resize(self, image, annotation, weight, name=None):
-        x1 = x2 = np.random.randint(0, image.shape[1])
-        y1 = y2 = np.random.randint(0, image.shape[0])
+        x1 = x2 = np.random.randint(0, image.shape[1]-1)
+        x2 += 1
+        y1 = y2 = np.random.randint(0, image.shape[0]-1)
+        y2 += 1
         h, w = image.shape[:2]
 
         # expand left, right, up, down
