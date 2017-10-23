@@ -2,7 +2,8 @@
 
 Tensorflow implementation of [Fully Convolutional Networks for Semantic Segmentation](http://arxiv.org/pdf/1605.06211v1.pdf) (FCN-8 in particular) based on the code written by [shekkizh](https://github.com/shekkizh/FCN.tensorflow) and modified to be used with ease for any given task.
 
-The model can be applied on the [Scene Parsing Challenge dataset](http://sceneparsing.csail.mit.edu/) provided by MIT straightaway after cloning this repo. I do not have any trained model available due to lack of computing resources.
+The model can be applied on the [Scene Parsing Challenge dataset](http://sceneparsing.csail.mit.edu/) provided by MIT straightaway after cloning this repo.
+For a **pretrained model** checkout this [link](https://mega.nz/#!YJpkBKyL!1oEHhe7T1JtkJ9ifRBqsBalHObjBW4AW0Tei7CEFTUQ), it is not very precise but that's the only one I could get due to my lack of computing resources.
 
 ## Table of contents
 1. [Prerequisites](#prerequisites)
