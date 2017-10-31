@@ -5,6 +5,8 @@ from six.moves import range
 
 import os
 import sys
+import time
+import threading
 
 import cv2
 import numpy as np
@@ -28,12 +30,17 @@ class TensorFCN(object):
         """
         self.logs_dir = logs_dir
         self.keep_prob = tf.placeholder(tf.float32, name='keep_prob')
-        self.image = tf.placeholder(
+
+        self.q_img = tf.placeholder(
             tf.float32, shape=[None, None, None, 3], name='image')
-        self.annotation = tf.placeholder(
+        self.q_ann = tf.placeholder(
             tf.int32, shape=[None, None, None, 1], name='annotation')
-        self.weight = tf.placeholder(
+        self.q_wgt = tf.placeholder(
             tf.float32, shape=[None, None, None, 1], name='weight')
+
+        self.queue = tf.FIFOQueue(2, [tf.float32, tf.int32, tf.float32])
+        self.enqueue_op = self.queue.enqueue([self.q_img, self.q_ann, self.q_wgt])
+        self.image, self.annotation, self.weight = self.queue.dequeue()
 
         self.lr = tf.placeholder(tf.float32, shape=[], name='learning_rate')
 
@@ -116,29 +123,34 @@ class TensorFCN(object):
         sv = self._setup_supervisor()
 
         with sv.managed_session() as sess:
+            def load_and_enqueue(dataset):
+                while True:
+                    images, anns, weights, _ = dataset.next_batch()
+                    images = np.float32(images) / 255.
+                    anns = np.int32(anns)
+                    sess.run(self.enqueue_op,
+                             feed_dict={
+                                 self.q_img: images,
+                                 self.q_ann: anns,
+                                 self.q_wgt: weights})
+
+            t = threading.Thread(target=load_and_enqueue, args=(train_set,))
+            t.start()
+
             print('Starting training...')
             while not sv.should_stop():
-                images, anns, weights, _ = train_set.next_batch()
-                # Transform to match NN inputs
-                images = np.float32(images) / 255.
-                anns = np.int32(anns)
-                feed = {
-                    self.image: images,
-                    self.annotation: anns,
-                    self.weight: weights,
-                    self.lr: lr,
-                    self.keep_prob: keep_prob
-                }
+                start = time.time()
+                feed = {self.keep_prob: keep_prob, self.lr: lr}
                 sess.run(self.train_op, feed_dict=feed)
 
                 step = sess.run(sv.global_step)
 
                 if (step == max_steps) or ((step % train_freq) == 0):
-                    loss, summary = sess.run(
-                        [self.loss_op, summ_train],
-                        feed_dict=feed)
+                    loss, summary = sess.run([self.loss_op, summ_train], feed_dict=feed)
                     sv.summary_computed(sess, summary, step)
                     print('Step %d\tTrain_loss: %g' % (step, loss))
+                    rate = train_set.batch_size / (time.time() - start)
+                    print('Images/s: %g' % rate)
 
                 if ((val_set is not None) and (val_freq > 0) and
                         (((step % val_freq) == 0) or (step == max_steps))):
@@ -187,7 +199,7 @@ class TensorFCN(object):
             os.makedirs(out_dir)
 
         sv = self._setup_supervisor()
-        
+
         with sv.managed_session() as sess:
             for i, fname in enumerate(files):
                 in_image = cv2.imread(fname)
